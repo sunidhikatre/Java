@@ -1,0 +1,185 @@
+SOLID Principles in Object-Oriented Design
+The SOLID principles are five design principles that help developers create scalable, maintainable, and flexible software.
+
+1️⃣ Single Responsibility Principle (SRP)
+Each class should have only one reason to change (i.e., one responsibility).
+Why? It makes the class easier to maintain and understand.
+✅ Example (Bad Practice)
+java
+Copy
+Edit
+class Report {
+    void generateReport() { /* Generates report */ }
+    void saveToDatabase() { /* Saves report to DB */ }
+    void printReport() { /* Prints the report */ }
+}
+This class does too much (report generation, database storage, printing).
+✅ Fixed (SRP Applied)
+java
+Copy
+Edit
+class ReportGenerator {
+    void generateReport() { /* Generates report */ }
+}
+
+class ReportSaver {
+    void saveToDatabase() { /* Saves report to DB */ }
+}
+
+class ReportPrinter {
+    void printReport() { /* Prints the report */ }
+}
+Each class has a single responsibility ✅
+2️⃣ Open-Closed Principle (OCP)
+Classes should be open for extension but closed for modification.
+Why? Avoid modifying existing code when adding new functionality.
+✅ Example (Bad Practice)
+java
+Copy
+Edit
+class PaymentProcessor {
+    void processPayment(String type) {
+        if (type.equals("CreditCard")) { /* Process Credit Card */ }
+        else if (type.equals("PayPal")) { /* Process PayPal */ }
+        else if (type.equals("Bitcoin")) { /* Process Bitcoin */ }
+    }
+}
+Problem: Every time a new payment method is added, we need to modify this class.
+✅ Fixed (OCP Applied)
+java
+Copy
+Edit
+interface Payment {
+    void pay();
+}
+
+class CreditCardPayment implements Payment {
+    public void pay() { /* Process Credit Card */ }
+}
+
+class PayPalPayment implements Payment {
+    public void pay() { /* Process PayPal */ }
+}
+
+class PaymentProcessor {
+    void processPayment(Payment payment) {
+        payment.pay();
+    }
+}
+New payment methods can be added without modifying PaymentProcessor ✅
+3️⃣ Liskov Substitution Principle (LSP)
+A subclass should be substitutable for its base class.
+Why? Ensures polymorphism works correctly.
+✅ Example (Bad Practice)
+java
+Copy
+Edit
+class Rectangle {
+    int width, height;
+    void setWidth(int w) { width = w; }
+    void setHeight(int h) { height = h; }
+}
+
+class Square extends Rectangle {
+    void setWidth(int w) { width = height = w; }
+    void setHeight(int h) { width = height = h; }
+}
+Problem: A Square does not behave like a Rectangle, breaking expectations.
+✅ Fixed (LSP Applied)
+java
+Copy
+Edit
+interface Shape {
+    int getArea();
+}
+
+class Rectangle implements Shape {
+    int width, height;
+    public int getArea() { return width * height; }
+}
+
+class Square implements Shape {
+    int side;
+    public int getArea() { return side * side; }
+}
+Now Square and Rectangle can be used interchangeably ✅
+4️⃣ Interface Segregation Principle (ISP)
+A class should not be forced to implement interfaces it does not use.
+Why? Avoid unnecessary dependencies.
+✅ Example (Bad Practice)
+java
+Copy
+Edit
+interface Worker {
+    void work();
+    void eat();
+}
+
+class Robot implements Worker {
+    public void work() { /* Works */ }
+    public void eat() { /* Robots don't eat! */ }
+}
+Problem: Robots don't eat, but they are forced to implement eat().
+✅ Fixed (ISP Applied)
+java
+Copy
+Edit
+interface Workable {
+    void work();
+}
+
+interface Eatable {
+    void eat();
+}
+
+class Human implements Workable, Eatable {
+    public void work() { /* Works */ }
+    public void eat() { /* Eats */ }
+}
+
+class Robot implements Workable {
+    public void work() { /* Works */ }
+}
+Now Robot doesn’t need to implement eat() ✅
+5️⃣ Dependency Inversion Principle (DIP)
+Depend on abstractions, not concrete classes.
+Why? Improves flexibility and decoupling.
+✅ Example (Bad Practice)
+java
+Copy
+Edit
+class Keyboard {}
+class Monitor {}
+
+class Computer {
+    private Keyboard keyboard = new Keyboard();
+    private Monitor monitor = new Monitor();
+}
+Problem: Computer is tightly coupled with Keyboard and Monitor.
+✅ Fixed (DIP Applied)
+java
+Copy
+Edit
+interface Keyboard {}
+interface Monitor {}
+
+class MechanicalKeyboard implements Keyboard {}
+class LEDMonitor implements Monitor {}
+
+class Computer {
+    private Keyboard keyboard;
+    private Monitor monitor;
+
+    public Computer(Keyboard keyboard, Monitor monitor) {
+        this.keyboard = keyboard;
+        this.monitor = monitor;
+    }
+}
+Now, Computer works with any Keyboard and Monitor implementation ✅
+🔹 Summary of SOLID Principles
+Principle	Meaning	Fix
+S	Single Responsibility: One class = One responsibility	Split responsibilities into separate classes
+O	Open-Closed: Open for extension, closed for modification	Use abstraction & inheritance
+L	Liskov Substitution: Subclasses should work as their parent class	Use proper inheritance & interfaces
+I	Interface Segregation: No unnecessary methods in an interface	Create smaller, specific interfaces
+D	Dependency Inversion: Depend on abstractions, not concrete implementations	Use interfaces and dependency injection
