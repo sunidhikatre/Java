@@ -1,0 +1,27 @@
+final class ImmutablePerson {
+    private final String name;
+    private final int age;
+
+    // Constructor to initialize fields
+    public ImmutablePerson(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getter methods (no setters)
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    // No methods that modify fields
+
+    // Override toString for better readability
+    @Override
+    public String toString() {
+        return "ImmutablePerson{name='" + name + "', age=" + age + "}";
+    }
+}
